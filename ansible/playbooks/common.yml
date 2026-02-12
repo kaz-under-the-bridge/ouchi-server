@@ -1,0 +1,6 @@
+---
+- name: 共通設定 + セキュリティ強化
+  hosts: all
+  roles:
+    - common
+    - security

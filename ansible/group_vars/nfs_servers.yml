@@ -1,0 +1,19 @@
+---
+# NFS Server 固有変数
+
+# UFW 許可ポート
+ufw_allowed_ports:
+  - { port: "22", proto: "tcp" }
+  - { port: "2049", proto: "tcp" }
+  - { port: "111", proto: "tcp" }
+
+# NFS エクスポート定義
+nfs_exports:
+  - path: /srv/nfs/timemachine
+    options: "rw,sync,no_subtree_check,no_root_squash"
+  - path: /srv/nfs/k8s
+    options: "rw,sync,no_subtree_check,no_root_squash"
+  - path: /srv/nfs/shared
+    options: "rw,sync,no_subtree_check,no_root_squash"
+  - path: /srv/nfs/dev/kaz
+    options: "rw,sync,no_subtree_check,no_root_squash"

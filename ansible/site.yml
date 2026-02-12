@@ -1,0 +1,9 @@
+---
+- name: 共通設定 + セキュリティ強化
+  ansible.builtin.import_playbook: playbooks/common.yml
+
+- name: NFS Server 構成
+  ansible.builtin.import_playbook: playbooks/nfs-server.yml
+
+- name: AI Commander 構成
+  ansible.builtin.import_playbook: playbooks/ai-commander.yml

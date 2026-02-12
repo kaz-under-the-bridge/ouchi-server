@@ -1,0 +1,5 @@
+---
+- name: mosh のインストール
+  ansible.builtin.apt:
+    name: mosh
+    state: present

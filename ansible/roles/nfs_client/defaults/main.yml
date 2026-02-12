@@ -1,0 +1,4 @@
+---
+nfs_mount_src: ""
+nfs_mount_dest: ""
+nfs_mount_opts: "defaults,nofail,_netdev"

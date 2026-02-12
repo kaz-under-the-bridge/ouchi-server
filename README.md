@@ -20,6 +20,7 @@
 | `/srv/nfs/timemachine` | macOS Time Machine バックアップ |
 | `/srv/nfs/k8s` | k8s NFS provisioner |
 | `/srv/nfs/shared` | 共有ファイル |
+| `/srv/nfs/dev/kaz` | kaz 開発ワークスペース (→ ai-commander:/home/kaz/git) |
 
 IP 割り当ての詳細は [docs/ip-allocation.md](docs/ip-allocation.md) を参照。
 
@@ -34,6 +35,13 @@ envs/pve/              # Proxmox VE 環境の Terraform 定義
   ├── cloud-init-*.tf  #   VM 別 cloud-init snippet
   ├── vm-*.tf          #   VM 定義
   └── outputs.tf       #   出力定義
+ansible/               # Ansible 構成管理
+  ├── site.yml         #   マスター Playbook
+  ├── inventory/       #   ホスト定義
+  ├── group_vars/      #   グループ変数
+  ├── playbooks/       #   個別 Playbook
+  ├── roles/           #   ロール定義
+  └── Makefile         #   make コマンド
 scripts/               # セットアップ用スクリプト
 docs/                  # ドキュメント
 .github/workflows/     # CI/CD (GitHub Actions)
@@ -42,9 +50,11 @@ docs/                  # ドキュメント
 ## 前提条件
 
 - Terraform >= 1.5.0
+- Ansible >= 2.15
 - Proxmox VE 9.x
 - AWS CLI (S3 バックエンド用)
 - Proxmox ホストへの SSH 接続 (`ssh pve`)
+- VM への SSH 接続 (`ssh ubuntu@192.168.1.220`, `ssh ubuntu@192.168.1.221`)
 
 ## セットアップ
 
@@ -69,12 +79,55 @@ terraform plan
 terraform apply
 ```
 
-## 接続
+## Ansible 構成管理
+
+Terraform で VM を作成後、Ansible で構成管理を行う。
 
 ```bash
+cd ansible
+
+# 接続確認
+make ping
+
+# 全体適用
+make all
+
+# 個別適用
+make nfs    # NFS Server のみ
+make ai     # AI Commander のみ
+
+# dry-run
+make check
+```
+
+### ロール一覧
+
+| ロール | 対象 | 内容 |
+|--------|------|------|
+| common | 全 VM | 基本パッケージ、タイムゾーン、unattended-upgrades |
+| security | 全 VM | SSH 強化、UFW、fail2ban |
+| nfs_server | nfs-server | NFS エクスポート管理 |
+| dev_user | ai-commander | kaz ユーザー作成 (sudo, SSH 鍵) |
+| cli_tools | ai-commander | bat, eza, ripgrep, fd, helix, zellij |
+| mosh | ai-commander | Mosh インストール |
+| nfs_client | ai-commander | NFS マウント (/home/kaz/git) |
+| claude_code | ai-commander | Claude Code インストール |
+
+**注意:** `ansible/group_vars/all.yml` の `ssh_public_key` を実際の公開鍵に置換すること。
+
+### 接続
+
+```bash
+# 管理用 (Ansible)
 ssh ubuntu@192.168.1.220  # nfs-server
 ssh ubuntu@192.168.1.221  # ai-commander
+
+# 開発用 (Ansible 適用後)
+ssh kaz@192.168.1.221     # ai-commander
+mosh kaz@192.168.1.221    # ai-commander (Mosh)
 ```
+
+詳細は [docs/remote-access.md](docs/remote-access.md) を参照。
 
 ## 技術スタック
 

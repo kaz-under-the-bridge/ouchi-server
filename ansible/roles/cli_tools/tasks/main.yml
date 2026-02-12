@@ -1,0 +1,78 @@
+---
+# --- apt パッケージ ---
+- name: CLI ツール (apt) のインストール
+  ansible.builtin.apt:
+    name: "{{ cli_tools_apt_packages }}"
+    state: present
+
+- name: シンボリックリンクの作成
+  ansible.builtin.file:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    state: link
+  loop: "{{ cli_tools_symlinks }}"
+
+# --- eza (公式リポジトリ) ---
+- name: eza の GPG キーを取得
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/eza-community/eza/main/deb.asc
+    dest: /etc/apt/keyrings/gierens.asc
+    mode: "0644"
+
+- name: eza の apt リポジトリを追加
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/gierens.asc] http://deb.gierens.de stable main"
+    filename: gierens
+    state: present
+
+- name: eza のインストール
+  ansible.builtin.apt:
+    name: eza
+    state: present
+    update_cache: true
+
+# --- helix (PPA) ---
+- name: helix の PPA を追加
+  ansible.builtin.apt_repository:
+    repo: ppa:maveonair/helix-editor
+    state: present
+
+- name: helix のインストール
+  ansible.builtin.apt:
+    name: helix
+    state: present
+    update_cache: true
+
+# --- zellij (GitHub Releases) ---
+- name: zellij のインストール確認
+  ansible.builtin.stat:
+    path: /usr/local/bin/zellij
+  register: zellij_bin
+
+- name: zellij のバージョン確認
+  ansible.builtin.command:
+    cmd: /usr/local/bin/zellij --version
+  register: zellij_current_version
+  changed_when: false
+  when: zellij_bin.stat.exists
+
+- name: zellij のダウンロード・インストール
+  when: not zellij_bin.stat.exists or zellij_version not in (zellij_current_version.stdout | default(''))
+  block:
+    - name: zellij のアーカイブをダウンロード
+      ansible.builtin.get_url:
+        url: "https://github.com/zellij-org/zellij/releases/download/v{{ zellij_version }}/zellij-x86_64-unknown-linux-musl.tar.gz"
+        dest: /tmp/zellij.tar.gz
+        mode: "0644"
+
+    - name: zellij を展開
+      ansible.builtin.unarchive:
+        src: /tmp/zellij.tar.gz
+        dest: /usr/local/bin
+        remote_src: true
+        mode: "0755"
+
+    - name: zellij アーカイブの削除
+      ansible.builtin.file:
+        path: /tmp/zellij.tar.gz
+        state: absent

@@ -1,0 +1,9 @@
+---
+- name: AI Commander 構成
+  hosts: ai_commanders
+  roles:
+    - dev_user
+    - cli_tools
+    - mosh
+    - nfs_client
+    - claude_code
