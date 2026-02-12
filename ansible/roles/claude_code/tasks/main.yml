@@ -1,0 +1,14 @@
+---
+- name: Claude Code のインストール確認
+  ansible.builtin.stat:
+    path: "/home/{{ dev_user_name }}/.local/bin/claude"
+  register: claude_bin
+
+- name: Claude Code のインストール
+  ansible.builtin.shell:
+    cmd: curl -fsSL https://claude.ai/install.sh | bash
+  become: true
+  become_user: "{{ dev_user_name }}"
+  when: not claude_bin.stat.exists
+  args:
+    creates: "/home/{{ dev_user_name }}/.local/bin/claude"

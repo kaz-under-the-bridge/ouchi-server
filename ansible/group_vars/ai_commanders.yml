@@ -1,0 +1,19 @@
+---
+# AI Commander 固有変数
+
+# UFW 許可ポート
+ufw_allowed_ports:
+  - { port: "22", proto: "tcp" }
+  - { port: "60000:60010", proto: "udp" }  # Mosh
+
+# 開発ユーザー設定
+dev_user_name: kaz
+dev_user_uid: 1001
+dev_user_shell: /bin/bash
+dev_user_groups:
+  - sudo
+
+# NFS クライアント設定
+nfs_mount_src: "192.168.1.220:/srv/nfs/dev/kaz"
+nfs_mount_dest: "/home/kaz/git"
+nfs_mount_opts: "defaults,nofail,_netdev"

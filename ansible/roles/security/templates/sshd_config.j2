@@ -1,0 +1,19 @@
+# Managed by Ansible
+Port 22
+AddressFamily any
+ListenAddress 0.0.0.0
+
+# 認証
+PermitRootLogin {{ sshd_permit_root_login }}
+PubkeyAuthentication {{ sshd_pubkey_authentication }}
+PasswordAuthentication {{ sshd_password_authentication }}
+ChallengeResponseAuthentication no
+UsePAM yes
+
+# その他
+X11Forwarding no
+PrintMotd no
+AcceptEnv LANG LC_*
+
+# sftp
+Subsystem sftp /usr/lib/openssh/sftp-server

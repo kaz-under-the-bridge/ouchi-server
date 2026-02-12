@@ -1,0 +1,11 @@
+---
+cli_tools_apt_packages:
+  - bat
+  - ripgrep
+  - fd-find
+
+cli_tools_symlinks:
+  - { src: /usr/bin/batcat, dest: /usr/local/bin/bat }
+  - { src: /usr/bin/fdfind, dest: /usr/local/bin/fd }
+
+zellij_version: "0.41.2"

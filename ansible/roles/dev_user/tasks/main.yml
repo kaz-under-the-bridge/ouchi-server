@@ -1,0 +1,40 @@
+---
+- name: "{{ dev_user_name }} ユーザーの作成"
+  ansible.builtin.user:
+    name: "{{ dev_user_name }}"
+    uid: "{{ dev_user_uid }}"
+    shell: "{{ dev_user_shell }}"
+    groups: "{{ dev_user_groups }}"
+    append: true
+    create_home: true
+
+- name: "{{ dev_user_name }} の sudo パスワードなし設定"
+  ansible.builtin.copy:
+    dest: "/etc/sudoers.d/{{ dev_user_name }}"
+    content: "{{ dev_user_name }} ALL=(ALL) NOPASSWD:ALL\n"
+    mode: "0440"
+    validate: "visudo -cf %s"
+
+- name: "{{ dev_user_name }} の .ssh ディレクトリ作成"
+  ansible.builtin.file:
+    path: "/home/{{ dev_user_name }}/.ssh"
+    state: directory
+    owner: "{{ dev_user_name }}"
+    group: "{{ dev_user_name }}"
+    mode: "0700"
+
+- name: "{{ dev_user_name }} の authorized_keys を配置"
+  ansible.builtin.copy:
+    dest: "/home/{{ dev_user_name }}/.ssh/authorized_keys"
+    content: "{{ ssh_public_key }}\n"
+    owner: "{{ dev_user_name }}"
+    group: "{{ dev_user_name }}"
+    mode: "0600"
+
+- name: "{{ dev_user_name }} の git ディレクトリ作成 (NFS マウントポイント)"
+  ansible.builtin.file:
+    path: "/home/{{ dev_user_name }}/git"
+    state: directory
+    owner: "{{ dev_user_name }}"
+    group: "{{ dev_user_name }}"
+    mode: "0755"

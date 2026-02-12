@@ -1,0 +1,4 @@
+---
+- name: exportfs をリロード
+  ansible.builtin.command:
+    cmd: exportfs -ra

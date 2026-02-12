@@ -1,0 +1,5 @@
+---
+- name: NFS Server 構成
+  hosts: nfs_servers
+  roles:
+    - nfs_server
