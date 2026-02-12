@@ -1,9 +1,20 @@
 ---
 - name: 共通設定 + セキュリティ強化
-  ansible.builtin.import_playbook: playbooks/common.yml
+  hosts: all
+  roles:
+    - common
+    - security
 
 - name: NFS Server 構成
-  ansible.builtin.import_playbook: playbooks/nfs-server.yml
+  hosts: nfs_servers
+  roles:
+    - nfs_server
 
 - name: AI Commander 構成
-  ansible.builtin.import_playbook: playbooks/ai-commander.yml
+  hosts: ai_commanders
+  roles:
+    - dev_user
+    - cli_tools
+    - mosh
+    - nfs_client
+    - claude_code
