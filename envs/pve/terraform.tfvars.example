@@ -1,2 +1,10 @@
 proxmox_endpoint  = "https://pve-local.under-the-bridge.co.jp:8006"
 proxmox_api_token = "terraform@pve!provider=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+
+ssh_public_key = "ssh-rsa AAAA... user@host"
+
+# network_gateway = "192.168.1.1"  # デフォルト値あり
+# network_dns     = "192.168.1.1"  # デフォルト値あり
+
+# scripts/identify-passthrough-disk.sh で特定した値を記入
+nfs_passthrough_disk_id = "ata-ST2000DM008-XXXXXX_YYYYYYYY"

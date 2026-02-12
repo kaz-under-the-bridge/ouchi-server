@@ -8,7 +8,7 @@ provider "proxmox" {
     username = "root"
 
     node {
-      name    = "pve"
+      name    = "pve-local"
       address = "pve-local.under-the-bridge.co.jp"
     }
   }
