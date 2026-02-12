@@ -6,13 +6,3 @@ subnet: 192.168.1.0/24
 # SSH 公開鍵 (ubuntu ユーザー + kaz ユーザー共通)
 # terraform.tfvars の ssh_public_key と同じ値を設定
 ssh_public_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDwHudE8GPjz41GOqQSnsEfX4yyhMM19flXAhdKai96WkQCuF/Xh5aeNmZ1wVpbMMYeo4tpvqSFfuiRAKWQTGPGncCTPUEzvy5FcIPnFo9FowfpAofYeoOGe2qQr2EHq9tHqTrdePjTEjrSKT2XMdUpJwIIPNYCwpJFTLfGvAVdISO+HA8OS1XlJyhmBOt1MAq0cf2pciJX9yZmzgBFVE2I/HfiT1wQU2vHt3crV6T+HOz6HDB46+lmxNf2XiI5Ny4XUPAuVo15XxGX99IZONj4O5LoW/5KciJ7pjAmZotO/kVKyaZKZR2yGyEhJ3P0Y8D2peIOPRZicTlpZxAneCXbZwUL4XDMqZd/Zqjwezc6+RNX2T4Q9k+WWykNziUXRlhbFZ3ZMmMp9VEcN+hrDnLIVR5nyeOjkuEqplxWD6G88F5ZMMy2QxCs3a6hdQ48RwqOuOKnZ+QDYYBrFhWN3nMw6vdpyMF9l64XTks2ryrK1U6+rlceYNiDVj827MVCRL0= haskazuh@m-2019000007935"
-
-# 共通パッケージ
-common_packages:
-  - curl
-  - git
-  - build-essential
-  - jq
-  - unzip
-  - htop
-  - tree

@@ -4,3 +4,5 @@ dev_user_uid: 1001
 dev_user_shell: /bin/bash
 dev_user_groups:
   - sudo
+
+ssh_public_key: ""

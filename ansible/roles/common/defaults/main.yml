@@ -1,0 +1,11 @@
+---
+timezone: Asia/Tokyo
+
+common_packages:
+  - curl
+  - git
+  - build-essential
+  - jq
+  - unzip
+  - htop
+  - tree

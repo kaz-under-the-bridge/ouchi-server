@@ -1,0 +1,12 @@
+---
+subnet: 192.168.1.0/24
+
+nfs_exports:
+  - path: /srv/nfs/timemachine
+    options: "rw,sync,no_subtree_check,no_root_squash"
+  - path: /srv/nfs/k8s
+    options: "rw,sync,no_subtree_check,no_root_squash"
+  - path: /srv/nfs/shared
+    options: "rw,sync,no_subtree_check,no_root_squash"
+  - path: /srv/nfs/dev/kaz
+    options: "rw,sync,no_subtree_check,no_root_squash"
