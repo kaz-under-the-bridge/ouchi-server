@@ -1,0 +1,2 @@
+proxmox_endpoint  = "https://pve-local.under-the-bridge.co.jp:8006"
+proxmox_api_token = "terraform@pve!provider=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
