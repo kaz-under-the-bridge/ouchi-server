@@ -43,7 +43,7 @@ docs/                  # ドキュメント
 
 - Terraform >= 1.5.0
 - Proxmox VE 9.x
-- AWS CLI (S3 バックエンド用、プロファイル: `utb-aws-main`)
+- AWS CLI (S3 バックエンド用)
 - Proxmox ホストへの SSH 接続 (`ssh pve`)
 
 ## セットアップ
@@ -79,7 +79,7 @@ ssh ubuntu@192.168.1.221  # ai-commander
 ## 技術スタック
 
 - [bpg/proxmox](https://registry.terraform.io/providers/bpg/proxmox/latest) ~> 0.95
-- Backend: S3 (`utb-ouchi-server-tfstate-279586433649`)
+- Backend: S3
 - OS: Ubuntu 24.04 LTS (cloud image)
 
 ## 注意事項
