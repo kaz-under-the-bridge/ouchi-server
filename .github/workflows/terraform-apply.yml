@@ -1,0 +1,42 @@
+name: Terraform Apply
+
+on:
+  workflow_dispatch:
+  # TODO: Proxmox への接続経路確保後に有効化
+  # push:
+  #   branches: [main]
+  #   paths: ["envs/**"]
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  TF_WORKING_DIR: envs/pve
+  AWS_REGION: ap-northeast-1
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::279586433649:role/GitHubActions_Terraform_ouchi_server_terraform_apply
+          aws-region: ${{ env.AWS_REGION }}
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.14.3"
+
+      - name: Terraform Init
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform init -backend-config="profile="
+
+      - name: Terraform Apply
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        env:
+          TF_VAR_proxmox_api_token: ${{ secrets.PROXMOX_API_TOKEN }}
+        run: terraform apply -auto-approve -input=false
