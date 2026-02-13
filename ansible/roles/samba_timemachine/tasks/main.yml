@@ -1,0 +1,52 @@
+---
+- name: samba パッケージのインストール
+  ansible.builtin.apt:
+    name:
+      - samba
+      - samba-vfs-modules
+    state: present
+
+- name: timemachine システムユーザーの作成
+  ansible.builtin.user:
+    name: "{{ samba_timemachine_user }}"
+    system: true
+    shell: /usr/sbin/nologin
+    create_home: false
+
+- name: Time Machine ディレクトリのオーナー設定
+  ansible.builtin.file:
+    path: "{{ samba_timemachine_path }}"
+    owner: "{{ samba_timemachine_user }}"
+    group: "{{ samba_timemachine_user }}"
+    mode: "0755"
+    state: directory
+
+- name: smb.conf を配置
+  ansible.builtin.template:
+    src: smb.conf.j2
+    dest: /etc/samba/smb.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: smbd を再起動
+
+- name: Samba ユーザーの存在確認
+  ansible.builtin.command:
+    cmd: pdbedit -L -u {{ samba_timemachine_user }}
+  register: samba_user_check
+  changed_when: false
+  failed_when: false
+
+- name: Samba パスワードの設定
+  ansible.builtin.shell:
+    cmd: >
+      printf '%s\n%s\n' '{{ samba_timemachine_password }}' '{{ samba_timemachine_password }}'
+      | smbpasswd -a -s {{ samba_timemachine_user }}
+  when: samba_user_check.rc != 0
+  no_log: true
+
+- name: smbd を有効化・起動
+  ansible.builtin.systemd:
+    name: smbd
+    enabled: true
+    state: started
