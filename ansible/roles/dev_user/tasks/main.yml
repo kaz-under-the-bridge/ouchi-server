@@ -38,3 +38,27 @@
     owner: "{{ dev_user_name }}"
     group: "{{ dev_user_name }}"
     mode: "0755"
+
+- name: keychain のインストール
+  ansible.builtin.apt:
+    name: keychain
+    state: present
+
+- name: github.com を known_hosts に追加
+  ansible.builtin.known_hosts:
+    path: "/home/{{ dev_user_name }}/.ssh/known_hosts"
+    name: github.com
+    key: "{{ lookup('pipe', 'ssh-keyscan -t ed25519 github.com 2>/dev/null') }}"
+    state: present
+  become_user: "{{ dev_user_name }}"
+
+- name: ssh-agent 自動起動の設定 (.bashrc)
+  ansible.builtin.blockinfile:
+    path: "/home/{{ dev_user_name }}/.bashrc"
+    marker: "# {mark} ANSIBLE MANAGED - ssh-agent"
+    block: |
+      eval "$(keychain --eval --agents ssh id_rsa 2>/dev/null)"
+    create: true
+    owner: "{{ dev_user_name }}"
+    group: "{{ dev_user_name }}"
+    mode: "0644"

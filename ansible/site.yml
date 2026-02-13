@@ -4,16 +4,17 @@
   roles:
     - common
     - security
+    - dev_user
 
 - name: NFS Server 構成
   hosts: nfs_servers
   roles:
     - nfs_server
+    - samba_timemachine
 
 - name: AI Commander 構成
   hosts: ai_commanders
   roles:
-    - dev_user
     - cli_tools
     - mosh
     - nfs_client

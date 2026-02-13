@@ -9,4 +9,4 @@ nfs_exports:
   - path: /srv/nfs/shared
     options: "rw,sync,no_subtree_check,no_root_squash"
   - path: /srv/nfs/dev/kaz
-    options: "rw,sync,no_subtree_check,no_root_squash"
+    options: "rw,sync,no_subtree_check,all_squash,anonuid=1001,anongid=1001"

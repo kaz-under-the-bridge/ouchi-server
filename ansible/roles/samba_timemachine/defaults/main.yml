@@ -1,0 +1,5 @@
+---
+samba_timemachine_user: timemachine
+samba_timemachine_password: timemachine
+samba_timemachine_path: /srv/nfs/timemachine
+samba_timemachine_size_limit: "1T"

@@ -39,3 +39,9 @@ terraform.rc
 
 # Ansible
 *.retry
+
+# ローカル手順書
+docs/local-*.md
+
+# Ansible Vault パスワード
+*.vault_pass

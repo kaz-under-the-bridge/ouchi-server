@@ -25,3 +25,24 @@
       APT::Periodic::Update-Package-Lists "1";
       APT::Periodic::Unattended-Upgrade "1";
     mode: "0644"
+
+- name: ubuntu ユーザーのパスワード設定
+  ansible.builtin.user:
+    name: ubuntu
+    password: "{{ vault_ubuntu_password }}"
+
+- name: GRUB シリアルコンソール設定
+  ansible.builtin.copy:
+    dest: /etc/default/grub.d/99-serial-console.cfg
+    content: |
+      GRUB_CMDLINE_LINUX="console=tty1 console=ttyS0,115200"
+      GRUB_TERMINAL="console serial"
+      GRUB_SERIAL_COMMAND="serial --speed=115200"
+    mode: "0644"
+  notify: update grub
+
+- name: serial-getty@ttyS0 の有効化
+  ansible.builtin.systemd:
+    name: serial-getty@ttyS0.service
+    enabled: true
+    state: started

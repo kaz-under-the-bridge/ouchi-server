@@ -1,0 +1,26 @@
+[global]
+workgroup = WORKGROUP
+server string = ouchi-server
+server role = standalone server
+log file = /var/log/samba/log.%m
+max log size = 1000
+
+# macOS 互換
+vfs objects = fruit streams_xattr
+fruit:metadata = stream
+fruit:model = MacSamba
+fruit:posix_rename = yes
+fruit:veto_appledouble = no
+fruit:nfs_aces = no
+fruit:wipe_intentionally_left_blank_rfork = yes
+fruit:delete_empty_adfiles = yes
+
+[timemachine]
+comment = Time Machine Backup
+path = {{ samba_timemachine_path }}
+valid users = {{ samba_timemachine_user }}
+browseable = yes
+writable = yes
+vfs objects = fruit streams_xattr
+fruit:time machine = yes
+fruit:time machine max size = {{ samba_timemachine_size_limit }}
