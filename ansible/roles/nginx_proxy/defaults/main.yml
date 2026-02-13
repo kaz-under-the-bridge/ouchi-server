@@ -1,0 +1,3 @@
+---
+certbot_domain: "under-the-bridge.co.jp"
+nginx_proxy_backends: []

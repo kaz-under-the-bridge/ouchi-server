@@ -1,0 +1,19 @@
+---
+# Reverse Proxy 固有変数
+
+# UFW 許可ポート
+ufw_allowed_ports:
+  - { port: "22", proto: "tcp" }
+  - { port: "80", proto: "tcp" }
+  - { port: "443", proto: "tcp" }
+
+# Certbot / Let's Encrypt 設定
+certbot_domain: "under-the-bridge.co.jp"
+certbot_email: "kaz@under-the-bridge.work"
+certbot_cloudflare_api_token: "{{ vault_cloudflare_api_token }}"
+
+# nginx リバースプロキシ バックエンド定義
+nginx_proxy_backends:
+  - name: openclaw
+    server_name: oc-local.under-the-bridge.co.jp
+    backend: "http://192.168.1.221:18789"

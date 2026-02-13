@@ -1,0 +1,5 @@
+---
+certbot_domain: "under-the-bridge.co.jp"
+certbot_email: "kaz@under-the-bridge.work"
+certbot_cloudflare_api_token: ""
+certbot_deploy_hook: "systemctl reload nginx"

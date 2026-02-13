@@ -1,0 +1,45 @@
+---
+- name: nginx をインストール
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+
+- name: デフォルトサイトを無効化
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: nginx をリロード
+
+- name: SSL 共通設定を配置
+  ansible.builtin.template:
+    src: ssl-params.conf.j2
+    dest: /etc/nginx/conf.d/ssl-params.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: nginx をリロード
+
+- name: デフォルト server ブロックを配置
+  ansible.builtin.template:
+    src: default.conf.j2
+    dest: /etc/nginx/conf.d/00-default.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: nginx をリロード
+
+- name: バックエンド server ブロックを配置
+  ansible.builtin.template:
+    src: proxy-backend.conf.j2
+    dest: "/etc/nginx/conf.d/{{ item.name }}.conf"
+    owner: root
+    group: root
+    mode: "0644"
+  loop: "{{ nginx_proxy_backends }}"
+  notify: nginx をリロード
+
+- name: nginx を有効化して起動
+  ansible.builtin.systemd:
+    name: nginx
+    enabled: true
+    state: started

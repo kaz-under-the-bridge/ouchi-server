@@ -1,0 +1,52 @@
+---
+- name: certbot と Cloudflare DNS プラグインをインストール
+  ansible.builtin.apt:
+    name:
+      - certbot
+      - python3-certbot-dns-cloudflare
+    state: present
+
+- name: Cloudflare 認証情報ディレクトリを作成
+  ansible.builtin.file:
+    path: /etc/letsencrypt/cloudflare
+    state: directory
+    owner: root
+    group: root
+    mode: "0700"
+
+- name: Cloudflare API トークンを配置
+  ansible.builtin.template:
+    src: cloudflare.ini.j2
+    dest: /etc/letsencrypt/cloudflare/cloudflare.ini
+    owner: root
+    group: root
+    mode: "0600"
+
+- name: 証明書の存在を確認
+  ansible.builtin.stat:
+    path: "/etc/letsencrypt/live/{{ certbot_domain }}/fullchain.pem"
+  register: cert_file
+
+- name: ワイルドカード証明書を取得
+  ansible.builtin.command:
+    cmd: >
+      certbot certonly
+      --dns-cloudflare
+      --dns-cloudflare-credentials /etc/letsencrypt/cloudflare/cloudflare.ini
+      --dns-cloudflare-propagation-seconds 30
+      -d "*.{{ certbot_domain }}"
+      -d "{{ certbot_domain }}"
+      --email "{{ certbot_email }}"
+      --agree-tos
+      --non-interactive
+  when: not cert_file.stat.exists
+
+- name: certbot renew の deploy hook を設定
+  ansible.builtin.copy:
+    dest: /etc/letsencrypt/renewal-hooks/deploy/reload-nginx.sh
+    content: |
+      #!/bin/bash
+      {{ certbot_deploy_hook }}
+    owner: root
+    group: root
+    mode: "0755"

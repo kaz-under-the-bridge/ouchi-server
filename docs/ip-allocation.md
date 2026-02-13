@@ -10,6 +10,7 @@
 | 192.168.1.250 | pve-local | Proxmox VE ホスト |
 | 192.168.1.220 | nfs-server | NFS Server (Time Machine / k8s / 共有ファイル) |
 | 192.168.1.221 | ai-commander | AI Commander (Claude Code / Cursor SSH 開発環境) |
+| 192.168.1.225 | reverse-proxy | リバースプロキシ (nginx + Let's Encrypt) |
 
 ## 予約
 

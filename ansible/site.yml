@@ -19,3 +19,9 @@
     - mosh
     - nfs_client
     - claude_code
+
+- name: Reverse Proxy 構成
+  hosts: reverse_proxies
+  roles:
+    - certbot_cloudflare
+    - nginx_proxy

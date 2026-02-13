@@ -5,6 +5,7 @@
 ufw_allowed_ports:
   - { port: "22", proto: "tcp" }
   - { port: "60000:60010", proto: "udp" }  # Mosh
+  - { port: "18789", proto: "tcp" }       # OpenClaw Dashboard
 
 # 開発ユーザー設定
 dev_user_name: kaz
