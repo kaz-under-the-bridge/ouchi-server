@@ -1,0 +1,19 @@
+# Managed by Ansible
+
+# HTTP → HTTPS リダイレクト
+server {
+    listen 80 default_server;
+    server_name _;
+    return 301 https://$host$request_uri;
+}
+
+# 未定義のサブドメインへのアクセスを拒否
+server {
+    listen 443 ssl default_server;
+    server_name _;
+
+    ssl_certificate     /etc/letsencrypt/live/{{ certbot_domain }}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{{ certbot_domain }}/privkey.pem;
+
+    return 444;
+}

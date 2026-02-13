@@ -1,4 +1,4 @@
-.PHONY: ping all nfs ai check
+.PHONY: ping all nfs ai proxy check
 
 ping:
 	ansible all -m ping
@@ -11,6 +11,9 @@ nfs:
 
 ai:
 	ansible-playbook playbooks/ai-commander.yml
+
+proxy:
+	ansible-playbook playbooks/reverse-proxy.yml
 
 check:
 	ansible-playbook site.yml --check --diff

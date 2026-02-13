@@ -1,0 +1,9 @@
+---
+- name: Reverse Proxy 構成
+  hosts: reverse_proxies
+  roles:
+    - common
+    - security
+    - dev_user
+    - certbot_cloudflare
+    - nginx_proxy
